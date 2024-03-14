@@ -15,9 +15,22 @@ public class ServicioHotel {
         ManejoHabitaciones habitaciones = ManejoHabitaciones.obtenerInstancia();
         habitaciones.cargarHabitaciones();
         ManejoClientes clientes = ManejoClientes.obtenerInstancia();
+        Lectura le = new Lectura();
         
-        for (int i = 0; i< 2; i++){
-            clientes.menu();
-        }
+        boolean seguir = true;
+        
+        do{
+            System.out.println("1. Menu clientes \n 2. Menu habitaciones");
+            int opcion = le.leerInt("Ingrese una opcion");
+            if(opcion == 1){
+                clientes.menu();
+            }
+            else if(opcion == 2){
+                habitaciones.menu();
+            }
+            else{
+                seguir = false;
+            }
+        }while(seguir);
     }
 }
