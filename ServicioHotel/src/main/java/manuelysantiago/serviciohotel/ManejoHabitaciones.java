@@ -17,7 +17,7 @@ public class ManejoHabitaciones {
     private static ManejoHabitaciones instancia = null;
     ArrayList<Habitacion> habitaciones = new ArrayList<>();
     Lectura le = new Lectura();
-    private final String ARCHIVO_HABITACIONES = "habitaciones.txt";
+    private final String archivo = "habitaciones.txt";
 
     public static ManejoHabitaciones obtenerInstancia() {
         if (instancia == null) {
@@ -29,32 +29,35 @@ public class ManejoHabitaciones {
     public void menu(){
         boolean seguir = true;
         do{
-            System.out.println("1. Crear habitaciones \n 2. Modificar habitacion \n 3. Ver habitaciones \n 4. salir");
+            System.out.println("""
+                                1. Crear habitaciones
+                                2. Modificar habitacion
+                                3. Ver habitaciones
+                                4. salir""");
             int opcion = le.leerInt("Ingrese una opcion");
             switch (opcion){
-                case 1:
+                case 1 -> {
                     crearHabitaciones();
                     seguir = false;
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     modificarHabitacion();
                     seguir = false;
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     mostrarHabitaciones();
                     seguir = false;
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     return;
-                default:
-                    System.out.println("Numero no valido, intentelo de nuevo");
-                    break;
+                }
+                default -> System.out.println("Numero no valido, intentelo de nuevo");
             }
         }while(seguir);
     }
     
     public void cargarHabitaciones() {
-        try (BufferedReader br = new BufferedReader(new FileReader(ARCHIVO_HABITACIONES))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(",");
@@ -70,7 +73,7 @@ public class ManejoHabitaciones {
     }
 
     private void guardarHabitaciones() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO_HABITACIONES))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
             for (Habitacion habitacion : habitaciones) {
                 bw.write(habitacion.getNumHabi()+","+habitacion.getCapHabi()+","+habitacion.getTipoHabi());
                 bw.newLine();
@@ -94,22 +97,22 @@ public class ManejoHabitaciones {
             habitaciones.add(new Habitacion(numHabi, capHabi, tipoHabi));
         }
         
-        if (!existeArchivo("habitaciones.txt")) {
-            crearArchivo("habitaciones.txt");
+        if (!existeArchivo()) {
+            crearArchivo();
         }
         
-        guardarEnArchivo("habitaciones.txt");
+        guardarEnArchivo();
     }
     
-    private boolean existeArchivo(String nombreArchivo) {
-        File archivo = new File(nombreArchivo);
-        return archivo.exists();
+    private boolean existeArchivo() {
+        File archivoE = new File(archivo);
+        return archivoE.exists();
     }
 
-    private void crearArchivo(String nombreArchivo) {
+    private void crearArchivo() {
         try {
-            File archivo = new File(nombreArchivo);
-            archivo.createNewFile();
+            File archivoC = new File(archivo);
+            archivoC.createNewFile();
         } 
         catch (IOException e) {
             System.err.println("Error al crear el archivo: " + e.getMessage());
@@ -117,8 +120,8 @@ public class ManejoHabitaciones {
         
     }
     
-    private void guardarEnArchivo(String nombreArchivo) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo))) {
+    private void guardarEnArchivo() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
             for (Habitacion habitacion : habitaciones) {
                 writer.write(habitacion.getNumHabi()+","+habitacion.getCapHabi()+","+habitacion.getTipoHabi());
                 writer.newLine();
@@ -163,7 +166,7 @@ public class ManejoHabitaciones {
     
     public void mostrarHabitacion(String id){
         for (Habitacion habitacion : habitaciones){
-            if(habitacion.getResidente().getId().equals(id)){
+            if(habitacion.getResidente() != null && habitacion.getResidente().getId().equals(id)){
                 System.out.println(habitacion.toString());
             }
         }
@@ -182,5 +185,14 @@ public class ManejoHabitaciones {
             }
             System.out.println("Habitacion no encontrada u ocupada, intente de nuevo");
         } while(seguir);
+    }
+    
+    public void salidaResidente(Cliente residente) {
+        for (Habitacion habitacion : habitaciones) {
+            Cliente habitacionResidente = habitacion.getResidente();
+            if (habitacionResidente != null && habitacionResidente.equals(residente)) {
+                habitacion.desocupar();
+            }
+        }
     }
 }

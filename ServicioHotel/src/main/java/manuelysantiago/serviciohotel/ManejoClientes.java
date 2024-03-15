@@ -29,26 +29,34 @@ public class ManejoClientes {
     public void menu(){
         boolean seguir = true;
         do{
-            System.out.println("1.Agregar un cliente " + "\n 2.Ver datos de un cliente \n 3.Cambiar datos de un cliente \n 4. Salir");
+            System.out.println("""
+                                1. Agregar un cliente 
+                                2. Ver datos de un cliente 
+                                3. Cambiar datos de un cliente 
+                                4. Salida cliente
+                                5. Registro comida 
+                                6. Salir""");
             int opcion = le.leerInt("Ingrese una opcion");
             switch (opcion){
-                case 1:
+                case 1 -> {
                     agregarCliente();
                     seguir = false;
-                    break;
-                case 2:
-                    verDatosCliente();
+                }
+                case 2 -> {
+                    String idBuscar = String.valueOf(le.leerInt("Ingrese el id a buscar"));
+                    verDatosCliente(idBuscar);
                     seguir = false;
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     modificarCliente();
                     seguir = false;
-                    break;
-                case 4:
+                }
+                case 4 -> salidaCliente();
+                case 5 -> registroComida();
+                case 6 -> {
                     return;
-                default:
-                    System.out.println("Numero no valido, intentelo de nuevo");
-                    break;
+                }
+                default -> System.out.println("Numero no valido, intentelo de nuevo");
             }
         }while(seguir);
     }
@@ -63,10 +71,9 @@ public class ManejoClientes {
         manejoHabitaciones.asignarResidente(aux);
     }
     
-    public void verDatosCliente(){
-        String idBuscar = String.valueOf(le.leerString("Ingrese el id a buscar"));
+    public void verDatosCliente(String idBuscar){
         for (Cliente cliente : clientes){
-            if(cliente.getId().equals(idBuscar)){
+            if(cliente.getId() != null && cliente.getId().equals(idBuscar)){
                 System.out.println(cliente.toString());
                 manejoHabitaciones.mostrarHabitacion(idBuscar);
             }
@@ -85,5 +92,43 @@ public class ManejoClientes {
             }
         }
         System.out.println("Cliente no encontrando");
+    }
+    
+    public void salidaCliente(){
+        String idCliente = String.valueOf(le.leerInt("Ingrese el id del cliente"));
+        verDatosCliente(idCliente);
+        String opcion = le.leerString("Ingrese Y si esta seguro");
+        if(opcion.equals("Y") || opcion.equals("y")){
+            Cliente clienteAEliminar = null;
+            for (Cliente cliente : clientes) {
+                if (cliente.getId() != null && cliente.getId().equals(idCliente)) {
+                    clienteAEliminar = cliente;
+                    break;
+                }
+            }
+        
+            if (clienteAEliminar != null) {
+                manejoHabitaciones.salidaResidente(clienteAEliminar);
+                clientes.remove(clienteAEliminar);
+                System.out.println("Cliente eliminado con exito");
+            } else {
+                System.out.println("Cliente no encontrando");
+            }
+        }
+    }
+    
+    public void registroComida(){
+        String idCliente = String.valueOf(le.leerInt("Ingrese el id del cliente"));
+        for (Cliente cliente : clientes){
+            if(cliente.getId() != null && cliente.getId().equals(idCliente)){
+                String nombreC = le.leerString("Ingrese el nombre del producto");
+                double precioC = le.leerFloat("Ingrese el precio del producto");
+                boolean chefFrances = le.leerBoolean("chef Frances?");
+                cliente.agregarComida(nombreC, precioC, chefFrances);
+                System.out.println("Guardado con exito");
+                return;
+            }
+        }
+        System.out.println("Cliente no encontrado");
     }
 }
