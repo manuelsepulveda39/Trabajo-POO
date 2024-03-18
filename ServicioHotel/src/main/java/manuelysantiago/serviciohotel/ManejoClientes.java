@@ -27,38 +27,30 @@ public class ManejoClientes {
     }
     
     public void menu(){
-        boolean seguir = true;
-        do{
-            System.out.println("""
-                                1. Agregar un cliente 
-                                2. Ver datos de un cliente 
-                                3. Cambiar datos de un cliente 
-                                4. Salida cliente
-                                5. Registro comida 
-                                6. Salir""");
-            int opcion = le.leerInt("Ingrese una opcion");
-            switch (opcion){
-                case 1 -> {
-                    agregarCliente();
-                    seguir = false;
-                }
-                case 2 -> {
-                    String idBuscar = String.valueOf(le.leerInt("Ingrese el id a buscar"));
-                    verDatosCliente(idBuscar);
-                    seguir = false;
-                }
-                case 3 -> {
-                    modificarCliente();
-                    seguir = false;
-                }
-                case 4 -> salidaCliente();
-                case 5 -> registroComida();
-                case 6 -> {
-                    return;
-                }
-                default -> System.out.println("Numero no valido, intentelo de nuevo");
+        System.out.println("""
+                            1. Agregar un cliente 
+                            2. Ver datos de un cliente 
+                            3. Cambiar datos de un cliente 
+                            4. Salida cliente
+                            5. Registro comida
+                            6. Registro lavanderia
+                            7. Salir""");
+        int opcion = le.leerInt("Ingrese una opcion");
+        switch (opcion){
+            case 1 -> agregarCliente();
+            case 2 -> {
+                String idBuscar = String.valueOf(le.leerInt("Ingrese el id a buscar"));
+                verDatosCliente(idBuscar);
             }
-        }while(seguir);
+            case 3 -> modificarCliente();
+            case 4 -> salidaCliente();
+            case 5 -> registroComida();
+            case 6 -> registroLavanderia();
+            case 7 -> {
+                return;
+            }
+            default -> System.out.println("Opcion no valida");
+        }
     }
     
     public void agregarCliente() {
@@ -101,13 +93,14 @@ public class ManejoClientes {
         if(opcion.equals("Y") || opcion.equals("y")){
             Cliente clienteAEliminar = null;
             for (Cliente cliente : clientes) {
-                if (cliente.getId() != null && cliente.getId().equals(idCliente)) {
+                if (cliente.getId().equals(idCliente)) {
                     clienteAEliminar = cliente;
                     break;
                 }
             }
         
             if (clienteAEliminar != null) {
+                facturarCliente(clienteAEliminar);
                 manejoHabitaciones.salidaResidente(clienteAEliminar);
                 clientes.remove(clienteAEliminar);
                 System.out.println("Cliente eliminado con exito");
@@ -120,7 +113,7 @@ public class ManejoClientes {
     public void registroComida(){
         String idCliente = String.valueOf(le.leerInt("Ingrese el id del cliente"));
         for (Cliente cliente : clientes){
-            if(cliente.getId() != null && cliente.getId().equals(idCliente)){
+            if(cliente.getId().equals(idCliente)){
                 String nombreC = le.leerString("Ingrese el nombre del producto");
                 double precioC = le.leerFloat("Ingrese el precio del producto");
                 boolean chefFrances = le.leerBoolean("chef Frances?");
@@ -130,5 +123,61 @@ public class ManejoClientes {
             }
         }
         System.out.println("Cliente no encontrado");
+    }
+    
+    public double registroDañosYRobos()
+    {
+        double totalDañosYRobos = 0;
+        if (le.leerBoolean("Se presentaron robos?")){
+            totalDañosYRobos += le.leerDoble("Ingrese un valor estimado");
+        }
+        if (le.leerBoolean("Se presentaron daños?")){
+            totalDañosYRobos += le.leerDoble("Ingrese un valor estimado");
+        }
+        return totalDañosYRobos;
+    }
+    
+    public void registroLavanderia(){
+        String idCliente = String.valueOf(le.leerInt("Ingrese el id del cliente"));
+        for (Cliente cliente : clientes){
+            if(cliente.getId().equals(idCliente)){
+                cliente.agregarLavada();
+                System.out.println("Lavada agrega con exito");
+                return;
+            }
+        }
+        System.out.println("Cliente no encontrado");
+    }
+    
+    public void facturarComida(Cliente cliente){
+        System.out.println("Factura de comida:");
+        for (Comida comida : cliente.getComidas()){
+            System.out.println(comida.toString());
+        }
+        System.out.println("El total en comida es: " + cliente.getTotalComida());
+    }
+    
+    public void facturarCliente(Cliente cliente){
+        double total = registroDañosYRobos();
+        
+        System.out.println("---------------------------------");
+        
+        facturarComida(cliente);
+        total += cliente.getTotalComida();
+        
+        System.out.println("---------------------------------");
+        
+        System.out.println(cliente.getLavanderia().toString());
+        total += cliente.getLavanderia().getTotal();
+        
+        System.out.println("---------------------------------");
+        
+        double totalHabitacion = manejoHabitaciones.facturarHabitacion(cliente.getId());
+        total += totalHabitacion;
+        System.out.println("Total habitacion: "+ totalHabitacion);
+        
+        System.out.println("---------------------------------");
+        
+        System.out.println("Total a pagar: " + total);
     }
 }

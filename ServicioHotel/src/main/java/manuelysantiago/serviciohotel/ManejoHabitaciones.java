@@ -27,33 +27,21 @@ public class ManejoHabitaciones {
     }
     
     public void menu(){
-        boolean seguir = true;
-        do{
-            System.out.println("""
-                                1. Crear habitaciones
-                                2. Modificar habitacion
-                                3. Ver habitaciones
-                                4. salir""");
-            int opcion = le.leerInt("Ingrese una opcion");
-            switch (opcion){
-                case 1 -> {
-                    crearHabitaciones();
-                    seguir = false;
-                }
-                case 2 -> {
-                    modificarHabitacion();
-                    seguir = false;
-                }
-                case 3 -> {
-                    mostrarHabitaciones();
-                    seguir = false;
-                }
-                case 4 -> {
-                    return;
-                }
-                default -> System.out.println("Numero no valido, intentelo de nuevo");
+        System.out.println("""
+                            1. Crear habitaciones
+                            2. Modificar habitacion
+                            3. Ver habitaciones
+                            4. salir""");
+        int opcion = le.leerInt("Ingrese una opcion");
+        switch (opcion){
+            case 1 -> crearHabitaciones();
+            case 2 -> modificarHabitacion();
+            case 3 -> mostrarHabitaciones();
+            case 4 -> {
+                return;
             }
-        }while(seguir);
+            default -> System.out.println("Numero no valido, intentelo de nuevo");
+        }
     }
     
     public void cargarHabitaciones() {
@@ -64,23 +52,12 @@ public class ManejoHabitaciones {
                 int numHabi = Integer.parseInt(partes[0]);
                 int capHabi = Integer.parseInt(partes[1]);
                 String tipoHabi = partes[2];
-                habitaciones.add(new Habitacion(numHabi, capHabi, tipoHabi));
+                double precioHabitacion = Double.parseDouble(partes[3]);
+                habitaciones.add(new Habitacion(numHabi, capHabi, tipoHabi, precioHabitacion));
             }
         } 
         catch (IOException e) {
             System.err.println("");
-        }
-    }
-
-    private void guardarHabitaciones() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
-            for (Habitacion habitacion : habitaciones) {
-                bw.write(habitacion.getNumHabi()+","+habitacion.getCapHabi()+","+habitacion.getTipoHabi());
-                bw.newLine();
-            }
-        } 
-        catch (IOException e) {
-            System.err.println("Error al guardar las habitaciones: " + e.getMessage());
         }
     }
 
@@ -93,8 +70,9 @@ public class ManejoHabitaciones {
             int numHabi = le.leerInt("Ingrese el número de habitación");
             int capHabi = le.leerInt("Ingrese la capacidad de la habitación");
             String tipoHabi = le.leerString("Ingrese el tipo de habitación");
+            double precioHabitacion = le.leerDoble("Ingrese el precio de la habitacion");
             
-            habitaciones.add(new Habitacion(numHabi, capHabi, tipoHabi));
+            habitaciones.add(new Habitacion(numHabi, capHabi, tipoHabi, precioHabitacion));
         }
         
         if (!existeArchivo()) {
@@ -123,7 +101,7 @@ public class ManejoHabitaciones {
     private void guardarEnArchivo() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
             for (Habitacion habitacion : habitaciones) {
-                writer.write(habitacion.getNumHabi()+","+habitacion.getCapHabi()+","+habitacion.getTipoHabi());
+                writer.write(habitacion.getNumHabi()+","+habitacion.getCapHabi()+","+habitacion.getTipoHabi()+","+habitacion.getPrecioHabitacion());
                 writer.newLine();
             }
         } 
@@ -139,9 +117,10 @@ public class ManejoHabitaciones {
             if (habitacion.getNumHabi() == numHabitacion && !habitacion.isOcupada()) {
                 habitacion.setCapHabi(le.leerInt("Ingrese la nueva capacidad"));
                 habitacion.setTipoHabi(le.leerString("Ingrese el nuevo tipo de habitación"));
+                habitacion.setPrecioHabitacion(le.leerDoble("Ingrese el nuevo precio de la habitacion"));
                 
                 System.out.println("Habitación modificada correctamente");
-                guardarHabitaciones();
+                guardarEnArchivo();
                 return;
             }
         }
@@ -194,5 +173,16 @@ public class ManejoHabitaciones {
                 habitacion.desocupar();
             }
         }
+    }
+    
+    public double facturarHabitacion(String idCliente){
+        double totalHabitacion = 0;
+        for (Habitacion habitacion : habitaciones){
+            if(habitacion.getResidente() != null && habitacion.getResidente().getId().equals(idCliente)){
+                System.out.println(habitacion.toString());
+                totalHabitacion = habitacion.getPrecioHabitacion() * habitacion.getResidente().getNumDias();
+            }
+        }
+        return totalHabitacion;
     }
 }

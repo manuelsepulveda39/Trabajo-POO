@@ -15,12 +15,14 @@ public class Habitacion {
     private String tipoHabi;
     private boolean ocupada;
     private Cliente residente;
+    private double precioHabitacion;
 
-    public Habitacion(int numHabi, int capHabi, String tipoHabi) {
+    public Habitacion(int numHabi, int capHabi, String tipoHabi, double precioHabitacion) {
         this.numHabi = numHabi;
         this.capHabi = capHabi;
         this.tipoHabi = tipoHabi;
         ocupada = false;
+        this.precioHabitacion = precioHabitacion;
     }
     
     public void ocupar(Cliente residente){
@@ -89,14 +91,29 @@ public class Habitacion {
         return residente;
     }
 
+    /**
+     * @return the precioHabitacion
+     */
+    public double getPrecioHabitacion() {
+        return precioHabitacion;
+    }
+
+    /**
+     * @param precioHabitacion the precioHabitacion to set
+     */
+    public void setPrecioHabitacion(double precioHabitacion) {
+        this.precioHabitacion = precioHabitacion;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Habitacion{");
-        sb.append("numHabi=").append(numHabi);
-        sb.append(", capHabi=").append(capHabi);
-        sb.append(", tipoHabi=").append(tipoHabi);
-        sb.append(", ocupada=").append(ocupada);
+        sb.append("numero habitacion = ").append(numHabi);
+        sb.append(", capacidad habitacion = ").append(capHabi);
+        sb.append(", tipo habitacion = ").append(tipoHabi);
+        sb.append(", ocupada = ").append(ocupada);
+        sb.append(", precio habitacion = ").append(precioHabitacion);
         sb.append('}');
         return sb.toString();
     }

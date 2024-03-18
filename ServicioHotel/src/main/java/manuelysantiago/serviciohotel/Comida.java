@@ -80,10 +80,10 @@ public class Comida {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Comida{");
-        sb.append("nombre=").append(nombre);
-        sb.append(", precio=").append(precio);
-        sb.append(", chefFrances=").append(chefFrances);
-        sb.append(", total=").append(total);
+        sb.append("nombre = ").append(nombre);
+        sb.append(", precio = ").append(precio);
+        sb.append(", chefFrances = ").append(chefFrances);
+        sb.append(", total = ").append(total);
         sb.append('}');
         return sb.toString();
     }

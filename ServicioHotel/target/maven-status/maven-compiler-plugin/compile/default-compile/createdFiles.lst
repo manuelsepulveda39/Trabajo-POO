@@ -2,6 +2,8 @@ manuelysantiago\serviciohotel\Lectura.class
 manuelysantiago\serviciohotel\Comida.class
 manuelysantiago\serviciohotel\ManejoHabitaciones.class
 manuelysantiago\serviciohotel\Habitacion.class
+manuelysantiago\serviciohotel\ManejoLavanderia.class
 manuelysantiago\serviciohotel\Cliente.class
+manuelysantiago\serviciohotel\Lavanderia.class
 manuelysantiago\serviciohotel\ManejoClientes.class
 manuelysantiago\serviciohotel\ServicioHotel.class

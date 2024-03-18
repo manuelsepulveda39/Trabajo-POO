@@ -4,6 +4,9 @@
 
 package manuelysantiago.serviciohotel;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * @author Usuario
@@ -17,6 +20,7 @@ public class ServicioHotel {
         habitaciones.cargarHabitaciones();
         ManejoClientes clientes = ManejoClientes.obtenerInstancia();
         Lectura le = new Lectura();
+        
         
         boolean seguir = true;
         

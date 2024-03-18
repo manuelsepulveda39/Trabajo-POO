@@ -20,6 +20,8 @@ public class Cliente {
     private LocalDate fechaIngreso;
     private LocalDate fechaSalida;
     private ArrayList<Comida> comidas = new ArrayList<>();
+    private double totalComida;
+    private Lavanderia lavanderia = new Lavanderia();
 
     public Cliente(String nombre, String id, String telefono, int numDias) {
         this.nombre = nombre;
@@ -28,10 +30,21 @@ public class Cliente {
         this.numDias = numDias;
         fechaIngreso = LocalDate.now();
         fechaSalida = fechaIngreso.plusDays(numDias);
+        totalComida = 0;
     }
     
     public void agregarComida(String nombreC, double precioC, boolean chefFrances){
         getComidas().add(new Comida(nombreC, precioC, chefFrances));
+        if(chefFrances){
+            totalComida += precioC + precioC*0.15;
+        }
+        else{
+            totalComida += precioC;
+        }
+    }
+    
+    public void agregarLavada(){
+        lavanderia.agregarLavada();
     }
     
     /**
@@ -124,6 +137,20 @@ public class Cliente {
     public ArrayList<Comida> getComidas() {
         return comidas;
     }
+    
+    /**
+     * @return the totalComida
+     */
+    public double getTotalComida() {
+        return totalComida;
+    }
+
+    /**
+     * @return the lavanderia
+     */
+    public Lavanderia getLavanderia() {
+        return lavanderia;
+    }
 
     @Override
     public int hashCode() {
@@ -171,11 +198,11 @@ public class Cliente {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Cliente{");
-        sb.append("nombre=").append(nombre);
-        sb.append(", id=").append(id);
-        sb.append(", telefono=").append(telefono);
-        sb.append(", fechaIngreso=").append(fechaIngreso);
-        sb.append(", fechaSalida=").append(fechaSalida);
+        sb.append("nombre = ").append(nombre);
+        sb.append(", id = ").append(id);
+        sb.append(", telefono = ").append(telefono);
+        sb.append(", fechaIngreso = ").append(fechaIngreso);
+        sb.append(", fechaSalida = ").append(fechaSalida);
         sb.append('}');
         return sb.toString();
     }
