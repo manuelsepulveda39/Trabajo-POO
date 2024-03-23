@@ -16,6 +16,7 @@ public class ManejoClientes {
     
     private static ManejoClientes instancia = null;
     Lectura le = new Lectura();
+     double totalDañosYRobos = 0;
     ArrayList<Cliente> clientes = new ArrayList<>();
     ManejoHabitaciones manejoHabitaciones = ManejoHabitaciones.obtenerInstancia();
     
@@ -127,7 +128,7 @@ public class ManejoClientes {
     
     public double registroDañosYRobos()
     {
-        double totalDañosYRobos = 0;
+       
         if (le.leerBoolean("Se presentaron robos?")){
             totalDañosYRobos += le.leerDoble("Ingrese un valor estimado");
         }
@@ -174,7 +175,7 @@ public class ManejoClientes {
         
         double totalHabitacion = manejoHabitaciones.facturarHabitacion(cliente.getId());
         total += totalHabitacion;
-        System.out.println("Total habitacion: "+ totalHabitacion);
+        System.out.println("Total habitacion: "+ (totalHabitacion + totalDañosYRobos));
         
         System.out.println("---------------------------------");
         
