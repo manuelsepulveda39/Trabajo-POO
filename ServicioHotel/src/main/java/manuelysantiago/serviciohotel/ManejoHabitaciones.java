@@ -66,13 +66,22 @@ public class ManejoHabitaciones {
         System.out.println("Creación de habitaciones:");
         int numHabitaciones = le.leerInt("Ingrese el numero de habitaciones que desea agregar");
         
-        for (int i = 0; i < numHabitaciones; i++) {
-            int numHabi = le.leerInt("Ingrese el número de habitación");
-            int capHabi = le.leerInt("Ingrese la capacidad de la habitación");
-            String tipoHabi = le.leerString("Ingrese el tipo de habitación");
-            double precioHabitacion = le.leerDoble("Ingrese el precio de la habitacion");
+        for (int i = 0; i < numHabitaciones; i++) 
+        {
+            int numHabi = le.leerInt("Ingrese el número de la habitación");
+            if(verificarNumHab(numHabi))
+            {
+              int capHabi = le.leerInt("Ingrese la capacidad de la habitación");
+              String tipoHabi = le.leerString("Ingrese el tipo de habitación (Individual,Pareja,Familiar)");
+              double precioHabitacion = le.leerDoble("Ingrese el precio de la habitacion");
             
-            habitaciones.add(new Habitacion(numHabi, capHabi, tipoHabi, precioHabitacion));
+              habitaciones.add(new Habitacion(numHabi, capHabi, tipoHabi, precioHabitacion));
+            }
+            else
+            {
+                i--;
+                System.out.println("La habitación con el num " + numHabi + " ya existe, intentalo de nuevo");
+            }
         }
         
         if (!existeArchivo()) {
@@ -82,6 +91,17 @@ public class ManejoHabitaciones {
         guardarEnArchivo();
     }
     
+    public boolean verificarNumHab(int num)
+    {
+        for(Habitacion hab : habitaciones)
+        {
+            if(hab.getNumHabi() == num)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     private boolean existeArchivo() {
         File archivoE = new File(archivo);
         return archivoE.exists();
@@ -184,5 +204,17 @@ public class ManejoHabitaciones {
             }
         }
         return totalHabitacion;
+    }
+   
+     public Habitacion buscarHab ( int numHabi)
+    {
+        for(Habitacion habitacion : habitaciones)
+        {
+            if(habitacion.getNumHabi() == numHabi)
+            {
+                return habitacion;
+            }   
+        }
+        return null;
     }
 }

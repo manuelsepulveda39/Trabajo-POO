@@ -19,6 +19,8 @@ public class ManejoClientes {
      double totalDañosYRobos = 0;
     ArrayList<Cliente> clientes = new ArrayList<>();
     ManejoHabitaciones manejoHabitaciones = ManejoHabitaciones.obtenerInstancia();
+   
+    
     
     public static ManejoClientes obtenerInstancia() {
         if (instancia == null) {
@@ -55,8 +57,16 @@ public class ManejoClientes {
     }
     
     public void agregarCliente() {
-        String nombre = le.leerString("Ingrese el nombre del cliente");
-        String id = String.valueOf(le.leerInt("Ingrese el id del cliente"));
+        String nombre;
+        String id = null;
+        do{
+            if(!verificarIdClient(id))
+            {
+                System.out.println("Este id ya esta asignado a un cliente, intentalo de nuevo");
+            }
+             nombre = le.leerString("Ingrese el nombre del cliente ");
+             id = String.valueOf(le.leerInt("Ingrese el id del cliente"));
+        }while(!verificarIdClient(id));
         String telefono = String.valueOf(le.leerInt("Ingrese el telefono del cliente"));
         int numDias = le.leerInt("Ingrese el numero de dias que se va quedar el cliente");
         Cliente aux = new Cliente(nombre, id, telefono, numDias);
@@ -64,6 +74,18 @@ public class ManejoClientes {
         manejoHabitaciones.asignarResidente(aux);
     }
     
+    
+    public boolean verificarIdClient(String id)
+    {
+        for(Cliente cliente : clientes)
+        {
+            if(id != null && cliente.getId().equals(id))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     public void verDatosCliente(String idBuscar){
         for (Cliente cliente : clientes){
             if(cliente.getId() != null && cliente.getId().equals(idBuscar)){
@@ -77,8 +99,8 @@ public class ManejoClientes {
         String idModificar = String.valueOf(le.leerString("Ingrese el id a buscar"));
         for (Cliente cliente : clientes){
             if(cliente.getId().equals(idModificar)){
-                cliente.setNombre(le.leerString("Ingrese el numero nombre"));
-                cliente.setTelefono(String.valueOf(le.leerInt("Ingrese el numero numero de telefono")));
+                cliente.setNombre(le.leerString("Ingrese el nuevo nombre"));
+                cliente.setTelefono(String.valueOf(le.leerInt("Ingrese el nuevo numero de telefono")));
                 
                 System.out.println("Cliente modificado correctamente");
                 return;
@@ -175,10 +197,23 @@ public class ManejoClientes {
         
         double totalHabitacion = manejoHabitaciones.facturarHabitacion(cliente.getId());
         total += totalHabitacion;
+        Recaudo.extracto.add(total);
         System.out.println("Total habitacion: "+ (totalHabitacion + totalDañosYRobos));
         
         System.out.println("---------------------------------");
         
-        System.out.println("Total a pagar: " + total);
+        int opcion = le.leerInt("Total a pagar: " + total + "\n De que forma se hará el pago? \n 1. Transferencia \n 2. Efectivo \n 3. Tarjeta");
+        switch(opcion)
+        {
+            case 1 -> {
+                PortalPagos transferencia = new Transferencia();
+                transferencia.realizarPago(total);
+                }
+            case 2 ->{ PortalPagos efectivo = new Efectivo();
+                efectivo.realizarPago(total);}
+            case 3 ->{ PortalPagos tarjeta = new Tarjeta();
+                tarjeta.realizarPago(total);}
+            default -> System.out.println("Opcion no valida");
+        }
     }
 }
