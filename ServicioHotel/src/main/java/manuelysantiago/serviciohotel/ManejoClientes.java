@@ -16,7 +16,7 @@ public class ManejoClientes {
     
     private static ManejoClientes instancia = null;
     Lectura le = new Lectura();
-     double totalDañosYRobos = 0;
+    double totalDañosYRobos = 0;
     ArrayList<Cliente> clientes = new ArrayList<>();
     ManejoHabitaciones manejoHabitaciones = ManejoHabitaciones.obtenerInstancia();
    
@@ -112,8 +112,7 @@ public class ManejoClientes {
     public void salidaCliente(){
         String idCliente = String.valueOf(le.leerInt("Ingrese el id del cliente"));
         verDatosCliente(idCliente);
-        String opcion = le.leerString("Ingrese Y si esta seguro");
-        if(opcion.equals("Y") || opcion.equals("y")){
+        if(le.leerBoolean("Esta seguro?")){
             Cliente clienteAEliminar = null;
             for (Cliente cliente : clientes) {
                 if (cliente.getId().equals(idCliente)) {
@@ -150,7 +149,6 @@ public class ManejoClientes {
     
     public double registroDañosYRobos()
     {
-       
         if (le.leerBoolean("Se presentaron robos?")){
             totalDañosYRobos += le.leerDoble("Ingrese un valor estimado");
         }

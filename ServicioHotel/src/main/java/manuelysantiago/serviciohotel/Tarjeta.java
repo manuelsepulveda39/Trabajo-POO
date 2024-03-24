@@ -10,6 +10,10 @@ package manuelysantiago.serviciohotel;
  */
 public class Tarjeta implements PortalPagos {
     
+    /*
+    * Codigo basado en el grupo de Angeles
+    */
+    
     Lectura le = new Lectura();
     @Override
     public void realizarPago(double total) {

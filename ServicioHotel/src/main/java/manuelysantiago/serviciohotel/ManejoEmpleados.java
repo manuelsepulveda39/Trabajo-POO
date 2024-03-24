@@ -13,18 +13,26 @@ import java.util.ArrayList;
  */
 public class ManejoEmpleados {
     
+    //Creacion de instancias
     Lectura le = new Lectura();
     private static ManejoEmpleados instancia = null;
     private static ManejoHabitaciones manejoHabitaciones = ManejoHabitaciones.obtenerInstancia();
+    
+    // Arraylists
     ArrayList<Empleado> recepcionistas = new ArrayList<>();
     ArrayList<Empleado> mucamas = new ArrayList<>();
     ArrayList<Empleado> chefs = new ArrayList<>();
     ArrayList<Aseo> aseos = new ArrayList();
+    
+    /*
+    * matrices basadas en el codigo del grupo de Juan Jose Garzon
+    */
+    
     Empleado[][] horarioRecep = new Empleado[7][3];
     Empleado[][] horarioMuca = new Empleado[7][3];
     Empleado[][] horarioChef = new Empleado[7][3];
     
-    
+    //Metodo que devuelve instancia de la clase
     public static ManejoEmpleados obtenerInstancia() {
         if (instancia == null) {
             instancia = new ManejoEmpleados();
@@ -32,6 +40,7 @@ public class ManejoEmpleados {
         return instancia;
     }
     
+    //Menu
     public void menuEmpleados(){
         System.out.println("""
                             1. Asignar Horario Recepcionistas
@@ -47,8 +56,7 @@ public class ManejoEmpleados {
                 return;
             }
             default -> System.out.println("Numero no valido, intentelo de nuevo");
-        }
-        
+        }  
     }
     
     public void horarioSemanaRecep()
@@ -73,6 +81,7 @@ public class ManejoEmpleados {
         }
         mostrarEmpleadoDispo(recepcionistas, horarioRecep, "recepcionistas");
     }
+    
     public void horarioSemanaMucama()
     {
         System.out.println("_________________");
@@ -112,8 +121,7 @@ public class ManejoEmpleados {
             else{
                 i--;
                 System.out.println("Ya existe un empleado con ese id, intentelo de nuevo");
-            }
-                               
+            }              
         }
         mostrarEmpleadoDispo(chefs, horarioChef, "chefs");
     }
@@ -121,7 +129,6 @@ public class ManejoEmpleados {
     
     public boolean verificarId(String id, ArrayList<Empleado> empleados)
     {
-        
         for(Empleado empleado : empleados)
         {
             if(empleado.getId().equals(id)){
@@ -161,33 +168,28 @@ public class ManejoEmpleados {
         
     }
    public void agregarEmpleado(ArrayList<Empleado> empleados, Empleado[][] matHorario, int i, int j) {
-    boolean empleadoEncontrado = false;
-    String respuesta;
-    do {
-        String idBuscar = String.valueOf(le.leerInt("Ingrese el id del empleado a escoger"));
-        for (Empleado empleado : empleados) {
-            if (empleado.getId() != null && empleado.getId().equals(idBuscar)) {
-                System.out.println(empleado.getNombre() + " ha sido seleccionad@");
-                respuesta = le.leerString("Ingrese Y si está seguro");
-                if (respuesta.equalsIgnoreCase("Y")) {
+        boolean empleadoEncontrado = false;
+        do {
+            String idBuscar = String.valueOf(le.leerInt("Ingrese el id del empleado a escoger"));
+            for (Empleado empleado : empleados) {
+                if (empleado.getId() != null && empleado.getId().equals(idBuscar)) {
+                    System.out.println(empleado.getNombre() + " ha sido seleccionad@");
                     matHorario[i][j] = empleado;
                     System.out.println("Agregad@ con éxito");
+                    empleadoEncontrado = true;
+                    break;
                 }
-                empleadoEncontrado = true;
-                break;
             }
-        }
-        if (!empleadoEncontrado) {
-            // Aquí puedes manejar el caso en el que no se encuentre ningún empleado con el ID especificado.
-            System.out.println("No se encontró ningún empleado con el ID especificado");
-            respuesta = le.leerString("¿Desea volver a intentarlo? (Y/N) ");
-            if (!respuesta.equalsIgnoreCase("Y") ) {
-                // Si el usuario no desea volver a intentarlo, salir del bucle.
-                break;
+            if (!empleadoEncontrado) {
+                // Aquí puedes manejar el caso en el que no se encuentre ningún empleado con el ID especificado.
+                System.out.println("No se encontró ningún empleado con el ID especificado");
+                if (!le.leerBoolean("¿Desea volver a intentarlo?")) {
+                    // Si el usuario no desea volver a intentarlo, salir del bucle.
+                    break;
+                }
             }
-        }
-    } while (!empleadoEncontrado);
-}
+        } while (!empleadoEncontrado);
+    }
 
     
     public void mostrarHorario(Empleado[][] matHorario)
@@ -225,7 +227,7 @@ public class ManejoEmpleados {
     public void agregarAseo()
     {
         
-        if(isVacio(mucamas))
+        if(!mucamas.isEmpty())
         {
             String idMuc = null;
             int numHabi = 0;
@@ -240,8 +242,8 @@ public class ManejoEmpleados {
             
             }while(verificarId(idMuc, mucamas) || manejoHabitaciones.verificarNumHab(numHabi));
         
-        Aseo aux = new Aseo(buscarEmp(idMuc, mucamas), manejoHabitaciones.buscarHab(numHabi));
-        aseos.add(aux);
+            Aseo aux = new Aseo(buscarEmp(idMuc, mucamas), manejoHabitaciones.buscarHab(numHabi));
+            aseos.add(aux);
         }
         else
         {
@@ -249,15 +251,6 @@ public class ManejoEmpleados {
         }
         
 
-    }
-    
-    public boolean isVacio(ArrayList<Empleado> empleado)
-    {    
-        if(empleado == null)
-        {
-            return true;
-        }
-        return false;
     }
     
     public void mostrarListaAseo ()

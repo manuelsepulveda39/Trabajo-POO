@@ -4,9 +4,6 @@
 
 package manuelysantiago.serviciohotel;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  *
  * @author Usuario
@@ -22,13 +19,10 @@ public class ServicioHotel {
         Lectura le = new Lectura();
         ManejoEmpleados empleados = ManejoEmpleados.obtenerInstancia();
         Recaudo recaudos = Recaudo.obtenerInstancia();
-       
-        
-        
         boolean seguir = true;
         
         do{
-            System.out.println(" 1. Menu Clientes \n 2. Menu Habitaciones \n 3. Menu Empleados \n 4. Mostrar Recaudo \n 5. Menu Aseo");
+            System.out.println(" 1. Menu Clientes \n 2. Menu Habitaciones \n 3. Menu Empleados \n 4. Mostrar Recaudo \n 5. Menu Aseo \n Ingrese otro numero para salir");
             int opcion = le.leerInt("Ingrese una opcion");
             switch (opcion) {
                 case 1 -> clientes.menu();

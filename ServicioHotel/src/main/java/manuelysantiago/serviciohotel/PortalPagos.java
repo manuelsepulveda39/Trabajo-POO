@@ -9,6 +9,9 @@ package manuelysantiago.serviciohotel;
  * @author HP
  */
 public interface PortalPagos {
+    /*
+    * Codigo basado en el grupo de Angeles
+    */
     
     public void realizarPago(double total);
     public void confirmarPago(double total);

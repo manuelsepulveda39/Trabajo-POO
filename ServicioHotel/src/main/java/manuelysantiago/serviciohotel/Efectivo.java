@@ -9,6 +9,11 @@ package manuelysantiago.serviciohotel;
  * @author HP
  */
 public class Efectivo implements PortalPagos{
+    
+    /*
+    * Codigo basado en el grupo de Angeles
+    */
+    
     Lectura le = new Lectura();
     @Override
     public void realizarPago(double total) {
@@ -28,5 +33,4 @@ public class Efectivo implements PortalPagos{
             }
         }
     }
-    
 }

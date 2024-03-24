@@ -2,4 +2,3 @@
 2,1,Individual,50000.0
 3,4,Familiar,120000.0
 4,4,Familiar,120000.0
-

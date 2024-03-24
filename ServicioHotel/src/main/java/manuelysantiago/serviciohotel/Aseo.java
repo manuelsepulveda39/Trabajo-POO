@@ -21,8 +21,6 @@ public class Aseo {
         this.hab = hab;
        fecha = LocalDateTime.now();
     }
-
-    
     
     /**
      * @return the mucama
@@ -70,14 +68,10 @@ public class Aseo {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Aseo{");
-        sb.append("mucama=").append(mucama.getId());
-        sb.append(", hab=").append(hab.getNumHabi());
-        sb.append(", fecha=").append(fecha);
+        sb.append("mucama = ").append(mucama.getId());
+        sb.append(", habitacion = ").append(hab.getNumHabi());
+        sb.append(", fecha = ").append(fecha);
         sb.append('}');
         return sb.toString();
     }
-    
-    
-    
-
 }

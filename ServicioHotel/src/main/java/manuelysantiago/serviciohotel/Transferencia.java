@@ -9,6 +9,11 @@ package manuelysantiago.serviciohotel;
  */
 
 public class Transferencia implements PortalPagos{
+    
+    /*
+    * Codigo basado en el grupo de Angeles
+    */
+    
     Lectura le = new Lectura();
 
     @Override
@@ -25,7 +30,4 @@ public class Transferencia implements PortalPagos{
             
         }
     }
-
-   
-    
 }
